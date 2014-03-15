@@ -1,0 +1,62 @@
+### good example of calssification using the titanic data set from kaggle.com
+
+
+
+summary(t)
+sapply(t[1, ], class)
+t$survived = as.factor(t$survived)
+t$pclass = as.factor(t$pclass)
+
+id = sample(1:891, 300, replace= 'True')
+
+tree.model = rpart(survived~., data =t[-id, ])
+
+table(t[id, 'survived'], predict(tree.model, t[id,], type = 'class'))
+
+testy$predicted = predict(tree.model, testy, type = 'class')
+sapply(testy[1, ], class)
+
+testy$pclass = as.factor(testy$pclass)
+
+write.csv(testy, file = 'c:/users/adelgad26/desktop/testy.csv')
+
+# naive bayes model 
+nb.model = naiveBayes(survived~., data =t[-id, ])
+table(t[id, 'survived'], predict(nb.model, t[id,]))
+testy$predicted_nb = predict(nb.model, testy)
+table(testy$predicted, testy$predicted_nb)
+write.csv(testy, file = 'c:/users/adelgad26/desktop/testy2.csv')
+
+#randomForest Model 
+summary(titatrain)
+sapply(titatrain[1, ], class)
+titatrain$survived = as.factor(titatrain$survived)
+titatrain$survived = as.factor(titatrain$survived)
+
+titatrain$is_test = rep(0, nrow(titatrain))
+titest$is_test = rep(1, nrow(titest))
+titest$survived = rep(1, nrow(titest))
+temp_fullset= rbind(titatrain, titest)
+
+sapply(temp_fullset[1, ], class)
+temp_fullset$pclass = as.factor(temp_fullset$pclass)
+temp_fullset$parch = as.factor(temp_fullset$parch)
+
+titatrain= temp_fullset[temp_fullset$is_test == 0, ]
+titatrain = titatrain[ , -c(9)]
+titest = temp_fullset[temp_fullset$is_test == 1, ]
+titest = titest[, -c(8)]
+
+summary(titest)
+titatrain = rfImpute(fare~., data = titatrain)
+titest = rfImpute(sex~., data= titest)
+
+
+rf.model = randomForest(survived~., data =titatrain[-id, ])
+table(titatrain[id, 'survived'], predict(rf.model, titatrain[id,], type = 'class'))
+
+titest$predicted = predict(tree.model, titest, type = 'class')
+
+table(titest$predicted)
+
+write.csv(titest, file = 'c:/users/adelgad26/desktop/titest.csv')
