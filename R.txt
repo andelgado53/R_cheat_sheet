@@ -1,0 +1,209 @@
+R cheat Sheet:
+
+1. To aggregate: Splits the data into subsets, computes summary statistics for each, and returns the result in a 		convenient form:
+	aggregate()
+  	EX:  aggregate(c.act[ , c("activations", "deacts", "rat")], by= list(c$cluster), FUN = mean)
+
+
+
+2. To add the cluster values to a data frame: c.act is a data frame:
+ 	ex:  c.act<- data.frame(c.act, c$cluster)
+	or c.act$cluster<- c$cluster;
+	table(c$cluster, dataset$column)
+	Note on Kmean()===> will not accept factor variables. Only numeric. 
+
+
+
+3. To plot the results of a Kmeans clustering: 
+	library(graphics):
+  	ex: plot(c.act[ , "rate"], col = c$cluster)
+
+
+
+4. to change names to lower case:
+	tolower(names(dataset))
+
+
+5. To split names:
+	splitNames(names(dataset), "\\.) ===> splits the name at the dot(.)
+
+
+6. to substitute a character in a name:
+	sub("_", "", names(data.set)) ====> substitutes _ for nothing (only the first _ ) (<= lenget
+	if all characthers need to be substituted then:
+	gsub("_", "", names(data.set)) ====> will replace every intance of _ for nothing. 
+
+
+7. To transform a continuos variable into buckets:
+	cut(dataset$column1 , seq(0, 1000, by= 200)) ====> will create buckets of 200 observations going from 0 		until 1000.
+	library(Hmisc):
+	cut2(dataset$column1, g = 6) ====> will create buckets based on percentiles.
+
+
+
+8. To see a table with the count of observation by factors in the variable:
+	table(factor(dataset$column1, useNA = 'ifany').
+
+
+9. to merge datasets:
+	merge(datset1, dataset2, by.x= dataset1$id, by.y= dataset2$id, all =TRUE) ===> will join tables on ids.
+
+
+10. To sort :
+	sort(dataset$column) 
+
+
+11. To order:
+	datasetOrdered<- dataset[(order(dataset$columntoOrder, ..), ]
+
+
+12. To remove a variable:
+	rm(variableNamw).
+
+
+13. To do a binomial distribution:
+	rbinom(n= numberofObservations, size= numberofTrials, prob= probaofSuccess).
+
+
+14. To use a model on a new dataset:
+	predict(predictionModel, testSET)
+
+
+
+15. Function to replace values:
+	fun= function(x)
+		{cnt = 1
+   		 while (cnt<= length(x)) 
+    			{
+    				if (x[cnt]> 0.5)
+     				 x[cnt] = "spam" 
+        			else x[cnt]= "noSPAM"
+                 		cnt = cnt +1
+                  		
+			 }
+         	return (x)        
+		}
+
+
+16. To apply a function across all variables:
+	sapply(DAtavector, function)
+
+
+17. To select a ramdom sample from a data set:
+	sample(vector, numberofOnbservations, replace= False for not the same observation twice)
+
+
+
+18. To convert to different data types:
+	as.numeric()
+	as.character()
+
+
+19. To download a file from a website:
+	download.file(fileUrl="http://..." , destfile = "c:\....")
+
+
+20. To read data saved on your computer in the working directory:
+	read.table(path, sep= ",", header= true)
+	read.csv(path) ====> head is default to TRUE and sep is default to "," 
+	read.csv(file.choose()) ====> will show a prompt to select file
+
+21. To open a connection:
+	File: file("file's path")
+	website: url("url", "r")
+	close(connection's name) ===> will close connection
+
+22. To read data from a connection:
+	readLines(connection's name)		
+	EX: con<- url("https:\\www.google.com\")
+	thesite<- readLines(con)
+	close(con)
+
+23. To write data out of R and into a file:
+	write.table(Robject, file = "c:/documents/fileNAme.csv", sep =",")
+
+24. To paste strings together:
+	paste("string1", "string2", ..., sep= "whatever goes between strings")
+	paste0() ===> same as paste but sep is default to ""
+
+25. To see information on a dataset:
+	names(dataSet)===> will give you names of columns. can be used to change the columns names. 
+	dim(dataSet) ====> will give you number of rows and columns.
+	quantile(dataset$column1) ====> will give the quantile distribution of data in column.
+	unique(dataset$column) ===> unique levels of a column.
+	is.na(dataset$column) ====> looks for nas.
+	sum(is.na(dataset$column) ====> count of nas
+
+26. To graph:	
+	boxplot: boxplot(dataSet$column) ====> for continuos variable
+		boxplot(dataSet$column ~ dataSet$column2) ====> dependent on second variable.		
+		Other options are col= color, names= names of the variables
+	Barplots: barplot(dataset$column) ===> bars for continuos variable
+	Histograms: hist(dataSet$column) ====> must be numeric values
+	Density plot: dens<- density(dataset$column) ====> creates a dens variable, only numeric variables		
+			plot(dens) ===> plots the density graph
+	ScatterPlot: plot(dataSet$column, dataSet$column2) ===> will plot bars for factor variables and scatter for 									loansgsub(replacenumeric.
+			use pch, col, cex to change the way scatter looks.
+			can use col = dataset&column ====> will change the color of points depending of values
+	smoothScatter: smoothScatter( dataset$column1, dataset$column2) 
+	adding lines, point: lines(), abline(), arrows(), text(), points()
+
+
+
+27. To use clustering:	
+	
+	First find the distance: distxy<- dist(dataframe)
+	Then generate the culster: hcluster<- hclust(dist)
+	and plot it:               plot(hcluster)
+
+28. To see the structure of a dataset:
+	str(dataset) ===> will give a summary of dataset
+
+29. To save an R session with all objects:
+	save file as RDA extension 
+	ex: myFile.rda
+
+30. To use the apply family of functions:
+	apply()===>will apply a function to a dimmension of a dataset
+		ex: apply(dataset, 2, mean) ===> will find the mean for each column of the dataset.
+	lapply() ===> will apply a function to each column of a dataset
+		ex: lapply(dataset, mean) ====> will find the mean for each column and returns a list
+	sapply() ===> similar to lapply() but it returns a list
+	tapply() ===> will apply a a function to each level of a factor
+		ex: tapply(dataset$column1, dataset["factorColumn2"...], mean) ===> will find mean of column1 values 		on each factor os column2 and combination of any other columns
+
+31. To not have to write the name of the dataset before calling the column (dataset$column):
+	attach(dataset) ===> allows to call a column by its name only.
+	dettach(dataset) ===> resets it back to normal. 
+
+32. To change the name of a column in a dataset:
+	names(dataset)[column number] <- "new name"
+
+33. To query a dataset using subset() function:
+	subset(x= dataset, subset= column1 > 1 & column2 > 5, select- c("column1", "column2")
+
+34. To Create a Tree model:
+	library(rpart)
+	tree<- rpart(dataset$var1~dataset$var2+ dataset$var3...)
+	then prune the tree by selecting the cp valued that mninimizes the xerror: printcp(tree)	
+	prune(tree, cp = cp with smallest cp value)
+
+
+35. To raplce the a value on a column:
+	churn$is_churn[churn$is_churn == 0] = 'Churn' ===> will replace the value 0 for 'churn'
+
+
+
+36. Barplot :
+	q= read.table('C:/Users/delandre/Documents/Q.csv', sep = ',', header = TRUE)
+	head(q)
+	class(q$NUM_OF_ORDERS)
+	barplot(q$NUM_OF_ORDERS, ylab= 'Number of Orders', xlab= 'Units per Oder', names.arg=rownames(q))
+	to avoid exponential notation:
+	barplot(q$NUM_OF_ORDERS,yaxt="n", names.arg=rownames(q))
+	axis(2, axTicks(2), format(axTicks(2), scientific = F))
+
+
+
+
+
